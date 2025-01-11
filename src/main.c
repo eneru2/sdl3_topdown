@@ -2,12 +2,37 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <SDL3_image/SDL_image.h>
+#include "entity.h"
+#include "player.h"
+
+#define HANDLE_EVENTS_ENTITIES(entities, entities_count, event) \
+  for (int i = 0; i < entities_count; i++) {    \
+    entities[i].handle_events(event); \
+  } 
+
+#define QUIT_ENTITIES(entities, entities_count) \
+  for (int i = 0; i < entities_count; i++) {    \
+    entities[i].quit(); \
+  } 
+
+#define UPDATE_ENTITIES(entities, entities_count) \
+  for (int i = 0; i < entities_count; i++) {    \
+    entities[i].update(); \
+  } 
+
+#define RENDER_ENTITIES(entities, entities_count, renderer) \
+  for (int i = 0; i < entities_count; i++) {    \
+    entities[i].render(renderer); \
+  } 
 
 SDL_Window* window;
 SDL_Renderer* renderer;
-SDL_Texture* player_texture;
+
+Entity entities[MAX_ENTITIES];
+int entities_count = 0;
 
 void SDL_AppQuit(void *appstate, SDL_AppResult result) {
+  QUIT_ENTITIES(entities, entities_count);
   SDL_DestroyRenderer(renderer);
   renderer = NULL;
   SDL_DestroyWindow(window);
@@ -23,22 +48,20 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
 }
 
 void update() {
-
+  UPDATE_ENTITIES(entities, entities_count);
 }
 
 void render() {
   SDL_RenderClear(renderer);
   SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
   
-  SDL_FRect sprite_portion = {17,14,15,18};
-  SDL_FRect player_position = {250, 250, 15, 18};
-  SDL_SetTextureScaleMode(player_texture, SDL_SCALEMODE_NEAREST);
-  SDL_RenderTexture(renderer, player_texture, &sprite_portion, &player_position);
+  RENDER_ENTITIES(entities, entities_count, renderer);
 
   SDL_RenderPresent(renderer);
 }
 
 SDL_AppResult SDL_AppIterate(void *appstate) {
+  update();
   render();
   return SDL_APP_CONTINUE;
 }
@@ -68,8 +91,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
     return SDL_APP_FAILURE;
   }
 
-  const char path[] = "./char_spritesheet.png";
-  player_texture = IMG_LoadTexture(renderer, path);
+  entities[entities_count++] = init_player(renderer);
 
   return SDL_APP_CONTINUE;
 }
