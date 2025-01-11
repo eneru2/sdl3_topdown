@@ -2,7 +2,12 @@
 
 static SDL_Texture* player_texture;
 static SDL_FRect sprite_portion = {17,14,15,18};
-static SDL_FRect player_position = {250, 250, 15, 18};
+
+typedef struct {
+  float x, y;
+} Position;
+
+Position position = {0, 0};
 
 static void quit() {
 
@@ -13,10 +18,27 @@ static void handle_events() {
 }
 
 static void update() {
+  const _Bool *keyboard_state = SDL_GetKeyboardState(NULL);
 
+  if (keyboard_state[SDL_SCANCODE_W]) {
+    position.y -= 1;
+  }
+
+  if (keyboard_state[SDL_SCANCODE_S]) {
+    position.y += 1;
+  }
+
+  if (keyboard_state[SDL_SCANCODE_A]) {
+    position.x -= 1;
+  }
+
+  if (keyboard_state[SDL_SCANCODE_D]) {
+    position.x += 1;
+  }
 }
 
 static void render(SDL_Renderer* renderer) {
+  SDL_FRect player_position = {position.x, position.y, 15, 18};
   SDL_SetTextureScaleMode(player_texture, SDL_SCALEMODE_NEAREST);
   SDL_RenderTexture(renderer, player_texture, &sprite_portion, &player_position);
 }
