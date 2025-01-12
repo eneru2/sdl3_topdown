@@ -8,3 +8,6 @@ typedef struct {
   void (*update)(float);
   void (*render)(SDL_Renderer*);
 } Entity;
+
+extern Entity entities[MAX_ENTITIES];
+extern int entities_count;
