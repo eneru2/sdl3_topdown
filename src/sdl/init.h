@@ -3,3 +3,4 @@
 #include <SDL3/SDL_main.h>
 #include "common.h"
 #include "../player.h"
+#include "../map.h"

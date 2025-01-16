@@ -9,7 +9,7 @@ typedef struct {
 
 Position position = {0, 0};
 
-static void quit() {
+static void cleanup() {
 
 }
 
@@ -49,7 +49,7 @@ Entity init_player(SDL_Renderer* renderer) {
   player_texture = IMG_LoadTexture(renderer, path);
 
   Entity player = {
-    .quit = quit,
+    .cleanup = cleanup,
     .handle_events = handle_events,
     .update = update,
     .render = render

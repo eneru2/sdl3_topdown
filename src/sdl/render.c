@@ -7,6 +7,7 @@ void app_render(void *appstate) {
   SDL_SetRenderDrawColor(state->renderer, 0, 255, 0, 255);
   
   for (int i = 0; i < entities_count; i++) {
+    if (!entities[i].render) continue;
     entities[i].render(state->renderer);
   }
 

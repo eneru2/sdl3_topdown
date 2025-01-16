@@ -7,6 +7,7 @@ void app_update(void *appstate) {
   state->delta_time = (state->current_tick - state->last_tick) / 1000.0f;
 
   for (int i = 0; i < entities_count; i++) {
+    if (!entities[i].update) continue;
     entities[i].update(state->delta_time);
   }
 }

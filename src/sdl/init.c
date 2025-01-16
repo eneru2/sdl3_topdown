@@ -28,6 +28,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
     return SDL_APP_FAILURE;
   }
 
+  entities[entities_count++] = init_map(state->renderer);
   entities[entities_count++] = init_player(state->renderer);
 
   return SDL_APP_CONTINUE;
