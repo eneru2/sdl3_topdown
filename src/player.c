@@ -39,14 +39,14 @@ static void update(float delta_time) {
 
 static void render(SDL_Renderer* renderer) {
   SDL_FRect player_position = {position.x, position.y, 15, 18};
-  SDL_SetTextureScaleMode(player_texture, SDL_SCALEMODE_NEAREST);
   SDL_RenderTexture(renderer, player_texture, &sprite_portion, &player_position);
 }
 
-Entity init_player(SDL_Renderer* renderer) {
+void init_player(SDL_Renderer* renderer) {
 
   const char path[] = "./char_spritesheet.png";
   player_texture = IMG_LoadTexture(renderer, path);
+  SDL_SetTextureScaleMode(player_texture, SDL_SCALEMODE_NEAREST);
 
   Entity player = {
     .cleanup = cleanup,
@@ -55,5 +55,5 @@ Entity init_player(SDL_Renderer* renderer) {
     .render = render
   };
 
-  return player;
+  create_entity(player);
 }
