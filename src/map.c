@@ -46,8 +46,8 @@ static void render(SDL_Renderer* renderer) {
         };
 
         SDL_FRect dst = {
-          j * map->tilewidth,
-          i * map->tileheight,
+          j * map->tilewidth - camera.x,
+          i * map->tileheight - camera.y,
           map->tilewidth,
           map->tileheight
         };
