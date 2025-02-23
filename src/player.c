@@ -1,13 +1,16 @@
 #include "player.h"
 
-static SDL_Texture* player_texture;
-static SDL_FRect sprite_portion = {17,14,15,18};
-
-SpriteSize sprite_size = {15, 18};
 Position player_position = {0, 0};
 
-static void cleanup() {
+static SDL_Texture* player_texture;
+static SDL_FRect sprite_portion = {17,14,15,18};
+static SpriteSize sprite_size = {15, 18};
+static int movement_speed = 30;
 
+static void cleanup() {
+  if (player_texture) {
+    SDL_DestroyTexture(player_texture);
+  }
 }
 
 static void handle_events() {
@@ -18,19 +21,19 @@ static void update(float delta_time) {
   const _Bool *keyboard_state = SDL_GetKeyboardState(NULL);
 
   if (keyboard_state[SDL_SCANCODE_W]) {
-    player_position.y -= 30 * delta_time;
+    player_position.y -= movement_speed * delta_time;
   }
 
   if (keyboard_state[SDL_SCANCODE_S]) {
-    player_position.y += 30  * delta_time;
+    player_position.y += movement_speed  * delta_time;
   }
 
   if (keyboard_state[SDL_SCANCODE_A]) {
-    player_position.x -= 30 * delta_time;
+    player_position.x -= movement_speed * delta_time;
   }
 
   if (keyboard_state[SDL_SCANCODE_D]) {
-    player_position.x += 30 * delta_time;
+    player_position.x += movement_speed * delta_time;
   }
 }
 
@@ -61,6 +64,7 @@ void init_player(SDL_Renderer* renderer) {
   SDL_SetTextureScaleMode(player_texture, SDL_SCALEMODE_NEAREST);
 
   Entity player = {
+    .name = "player",
     .cleanup = cleanup,
     .handle_events = handle_events,
     .update = update,

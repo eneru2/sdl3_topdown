@@ -38,3 +38,12 @@ void swap_entities(int index1, int index2) {
   entities[index1] = entities[index2];
   entities[index2] = temp;
 }
+
+int find_entity(const char* name) {
+  for (int i = 0; i < entities_count; i++) {
+    if (strcmp(entities[i].name, name) == 0) {
+      return i;
+    }
+  }
+  return -1;
+}

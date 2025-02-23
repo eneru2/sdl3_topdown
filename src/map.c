@@ -6,6 +6,30 @@ static cute_tiled_layer_t* layer;
 static cute_tiled_tileset_t* tileset;
 static Texture* texture;
 
+static void cleanup() {
+  if (texture) {
+    Texture* current_texture = texture;
+
+    while (current_texture) {
+      Texture* next_texture = current_texture->next;
+
+      if (current_texture->texture) {
+        SDL_DestroyTexture(current_texture->texture);
+      }
+
+      SDL_free(current_texture);
+      current_texture = next_texture;
+    }
+
+    texture = NULL;
+  }
+
+  if (map) {
+    cute_tiled_free_map(map);
+    map = NULL;
+  }
+}
+
 static void render(SDL_Renderer* renderer) {
   cute_tiled_layer_t* temp_layer = layer;
 
@@ -101,7 +125,9 @@ void init_map(SDL_Renderer* renderer) {
   }
 
   Entity map_e = {
+    .name = "map",
     .render = render,
+    .cleanup = cleanup
   };
 
   create_entity(map_e);
